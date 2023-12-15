@@ -16,19 +16,15 @@ import base.ControlActions;
 import pages.LoginPage;
 import utility.ExcelOperations;
 
-public class LoginTest {
-	LoginPage loginPage;
+public class LoginTest extends TestBase {
 
-	@BeforeMethod
-	public void setup() {
-		ControlActions.launchBrowser();
-		loginPage = new LoginPage();
-	}
 
 	@Test
 	public void loginTest() {
+		ControlActions.takeScreenshot("login1");
 		loginPage.login("sayali.honrao@gmail.com", "Sayali@1441");
 		boolean loginFlag = loginPage.isLoginSuccessFullyDisplayed();
+		ControlActions.takeScreenshot("login2");
 		Assert.assertTrue(loginFlag);
 	}
 
@@ -113,10 +109,5 @@ public class LoginTest {
 	@DataProvider(name = "LoginDataProvider")
 	public Object[][] getLoginData() throws IOException {
 		return ExcelOperations.getAllRows(".//testData/LoginData.xlsx", "Login");
-	}
-
-	@AfterMethod
-	public void tearDown() {
-		ControlActions.closeBrowser();
 	}
 }
