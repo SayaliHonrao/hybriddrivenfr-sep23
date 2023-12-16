@@ -2,6 +2,8 @@ package base;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -156,7 +158,45 @@ public abstract class ControlActions {
 		}
 	}
 
+	protected List<String> getElementTextList(List<WebElement> listOfWebElements){
+		List<String> listOfElementText = new ArrayList<String>();
+		for(WebElement element : listOfWebElements) {
+			listOfElementText.add(element.getText());
+		}
+		return listOfElementText;
+	}
+	
+	protected void clickOnElement(String locatorType, String locatorValue, boolean isWaitRequired) {
+		/*
+		 * WebElement e = getElement(locatorType, locatorValue, isWaitRequired);
+		 * e.click();
+		 */
+		clickOnElement(locatorType, locatorValue, isWaitRequired, false);
+	}
+	
+	protected void clickOnElement(String locatorType, String locatorValue, boolean isWaitRequired, boolean isWaitRequiredBeforeClick) {
+		WebElement e = getElement(locatorType, locatorValue, isWaitRequired);
+		if(isWaitRequiredBeforeClick) {
+			waitForElementToBeClickable(e);
+		}
+		e.click();
+	}
+	
+	protected void clickOnElement(WebElement element, boolean isWaitRequired) {
+		wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+	}
+	
 	protected String getCurrentURL() {
 		return driver.getCurrentUrl();
+	}
+	
+	protected String getElementText(String locatorType, String locatorValue, boolean isWaitRequired) {
+		return getElement(locatorType, locatorValue, isWaitRequired).getText();
+	}
+	
+	protected String getElementText(WebElement e, boolean isWaitRequired) {
+		if(isWaitRequired)
+			waitForElementToBeVisible(e);
+		return e.getText();
 	}
 }
